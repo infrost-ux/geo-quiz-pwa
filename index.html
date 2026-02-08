@@ -1,0 +1,62 @@
+index.html
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0B1220" />
+  <title>Geo Quiz</title>
+  <style>
+    body{margin:0;font-family:system-ui;background:#0B1220;color:#fff}
+    .wrap{max-width:520px;margin:0 auto;padding:16px;min-height:100vh}
+    .card{background:rgba(255,255,255,.06);border-radius:18px;padding:16px}
+    button{width:100%;padding:14px;border-radius:14px;border:0;
+      background:rgba(255,255,255,.12);color:#fff;font-size:16px;font-weight:700;margin-top:10px}
+    img{width:100%;height:160px;object-fit:contain;margin-bottom:12px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <img id="flag">
+      <h2 id="q">로딩중…</h2>
+      <div id="choices"></div>
+    </div>
+  </div>
+
+<script>
+const API="https://restcountries.com/v3.1/all?fields=name,capital,population,flags";
+let countries=[], q;
+
+fetch(API).then(r=>r.json()).then(d=>{
+  countries=d.filter(c=>c.population);
+  next();
+});
+
+function next(){
+  q=countries[Math.floor(Math.random()*countries.length)];
+  document.getElementById("flag").src=q.flags.png;
+  document.getElementById("q").innerText=
+    q.name.common+"의 인구는 어느 정도일까요?";
+  const pop=q.population;
+  const ranges=[
+    [pop*0.6,pop*0.8],
+    [pop*0.9,pop*1.1],
+    [pop*1.2,pop*1.5],
+    [pop*1.6,pop*2]
+  ];
+  const correct=1;
+  const box=document.getElementById("choices");
+  box.innerHTML="";
+  ranges.sort(()=>Math.random()-0.5).forEach((r,i)=>{
+    const b=document.createElement("button");
+    b.innerText=Math.round(r[0]/1e6)+"M ~ "+Math.round(r[1]/1e6)+"M";
+    b.onclick=()=>{alert(i===correct?"정답!":"오답");next();}
+    box.appendChild(b);
+  });
+}
+</script>
+</body>
+</html>
+
+add index.html

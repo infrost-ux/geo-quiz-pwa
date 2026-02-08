@@ -37,8 +37,8 @@ function next(){
   q=countries[Math.floor(Math.random()*countries.length)];
   document.getElementById("flag").src=q.flags.png;
   document.getElementById("q").innerText=
-    q.name.common+"의 인구는 어느 정도일까요?";
-  const pop=q.population;
+    q.name.common+"의 인구는 어느 
+    const pop = q.population || Math.floor(Math.random()*90000000 + 1000000);
   const ranges=[
     [pop*0.6,pop*0.8],
     [pop*0.9,pop*1.1],
